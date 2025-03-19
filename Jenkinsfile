@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "kanishkharamesh/Jenkins"
+        IMAGE_NAME = "kanishkharamesh"
         REGISTRY = "docker.io"
         DOCKER_CREDENTIALS_ID = "kanishkharamesh"
         GITHUB_CREDENTIALS_ID = "Kanishkharamesh"
