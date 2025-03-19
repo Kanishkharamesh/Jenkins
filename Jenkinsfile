@@ -2,17 +2,17 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "techtalkjervin/my-app"
+        IMAGE_NAME = "kanishkharamesh/Jenkins"
         REGISTRY = "docker.io"
-        DOCKER_CREDENTIALS_ID = "docker-hub-credentials"
-        GITHUB_CREDENTIALS_ID = "github-credentials"
-        APP_DIR = "/opt/docker-kec"
+        DOCKER_CREDENTIALS_ID = "kanishkharamesh"
+        GITHUB_CREDENTIALS_ID = "Kanishkharamesh"
+        APP_DIR = "/home/vboxuser/Desktop/Jenkins"
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                git credentialsId: GITHUB_CREDENTIALS_ID, url: 'https://github.com/Jervinjeno/devops-kec.git', branch: 'main'
+                git credentialsId: GITHUB_CREDENTIALS_ID, url: 'https://github.com/Kanishkharamesh/Jenkins.git', branch: 'main'
             }
         }
 
