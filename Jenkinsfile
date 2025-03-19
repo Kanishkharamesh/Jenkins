@@ -2,24 +2,24 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "kanishkharamesh"
+        IMAGE_NAME = "kanishkharamesh/my-app"
         REGISTRY = "docker.io"
-        DOCKER_CREDENTIALS_ID = "kanishkharamesh"
-        GITHUB_CREDENTIALS_ID = "Kanishkharamesh"
-        APP_DIR = "/var/lib/jenkins/workspace/CICD"
+        APP_DIR = "/home/vboxuser/Desktop/Jenkins"
+        DOCKER_USER = "kanishkharamesh"          // Replace with your Docker Hub username
+        DOCKER_PASS = "ka12@2003"          // Replace with your Docker Hub password
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                git credentialsId: GITHUB_CREDENTIALS_ID, url: 'https://github.com/Kanishkharamesh/Jenkins.git', branch: 'main'
+                git url: 'https://github.com/Kanishkharamesh/Jenkins.git', branch: 'main'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "cd $APP_DIR && docker build -t $IMAGE_NAME:latest ."
+                    sh "docker build -t $IMAGE_NAME:latest ."
                 }
             }
         }
@@ -27,9 +27,7 @@ pipeline {
         stage('Login to Docker Registry') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                    }
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
                 }
             }
         }
@@ -45,7 +43,7 @@ pipeline {
         stage('Deploy using Docker Compose') {
             steps {
                 script {
-                    sh "cd $APP_DIR && docker-compose down && docker-compose up -d"
+                    sh "docker-compose up -d"
                 }
             }
         }
@@ -53,7 +51,7 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline executed successfully! '
+            echo 'Pipeline executed successfully!'
         }
         failure {
             echo 'Pipeline failed! Check the logs for errors.'
