@@ -6,7 +6,7 @@ pipeline {
         REGISTRY = "docker.io"
         DOCKER_CREDENTIALS_ID = "kanishkharamesh"
         GITHUB_CREDENTIALS_ID = "Kanishkharamesh"
-        APP_DIR = "/home/vboxuser/Desktop/Jenkins"
+        APP_DIR = "/var/lib/jenkins/workspace/CICD"
     }
 
     stages {
