@@ -2,29 +2,50 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = "your-dockerhub-username" // Use the same DockerHub username
-        IMAGE_NAME = "webapp"
-        TAG = "latest"
-        WORKDIR = "/opt/docker-kec" // Change the folder path based on where your Dockerfile and docker-compose.yml reside
+        IMAGE_NAME = "techtalkjervin/my-app"
+        REGISTRY = "docker.io"
+        DOCKER_CREDENTIALS_ID = "docker-hub-credentials"
+        GITHUB_CREDENTIALS_ID = "github-credentials"
+        APP_DIR = "/opt/docker-kec"
     }
 
     stages {
-
-        stage('Build & Push Docker Image') {
+        stage('Checkout Code') {
             steps {
-                dir("$WORKDIR") {  
-                    sh 'docker build -t $REGISTRY/$IMAGE_NAME:$TAG .'
-                    withDockerRegistry([credentialsId: 'docker-hub-creds', url: '']) {
-                        sh 'docker push $REGISTRY/$IMAGE_NAME:$TAG'
+                git credentialsId: GITHUB_CREDENTIALS_ID, url: 'https://github.com/Jervinjeno/devops-kec.git', branch: 'main'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh "cd $APP_DIR && docker build -t $IMAGE_NAME:latest ."
+                }
+            }
+        }
+
+        stage('Login to Docker Registry') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
                     }
                 }
             }
         }
 
-        stage('Deploy Application') {
+        stage('Push Image to Docker Registry') {
             steps {
-                dir("$WORKDIR") {
-                    sh 'docker-compose up -d'
+                script {
+                    sh "docker push $IMAGE_NAME:latest"
+                }
+            }
+        }
+
+        stage('Deploy using Docker Compose') {
+            steps {
+                script {
+                    sh "cd $APP_DIR && docker-compose down && docker-compose up -d"
                 }
             }
         }
@@ -32,10 +53,10 @@ pipeline {
 
     post {
         success {
-            echo 'Build, Push & Deploy Successful!'
+            echo 'Pipeline executed successfully! '
         }
         failure {
-            echo 'Pipeline Failed. Check logs!'
+            echo 'Pipeline failed! Check the logs for errors.'
         }
     }
 }
