@@ -6,7 +6,11 @@ pipeline {
         REGISTRY = "docker.io"
         APP_DIR = "/home/vboxuser/Desktop/Jenkins"
         DOCKER_USER = "kanishkharamesh"          // Replace with your Docker Hub username
+<<<<<<< HEAD
         DOCKER_PASS = "ka12@2003"          // Replace with your Docker Hub password
+=======
+        DOCKER_PASS = "ka12@20033"          // Replace with your Docker Hub password
+>>>>>>> 7180f88 (updated)
     }
 
     stages {
