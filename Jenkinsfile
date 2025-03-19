@@ -4,23 +4,15 @@ pipeline {
     environment {
         IMAGE_NAME = "kanishkharamesh/my-app"
         REGISTRY = "docker.io"
-        APP_DIR = "/home/vboxuser/Desktop/Jenkins"
+        APP_DIR = "/home/vboxuser/Desktop/Jenkins/"
         DOCKER_USER = "kanishkharamesh"          // Replace with your Docker Hub username
-<<<<<<< HEAD
-<<<<<<< HEAD
-        DOCKER_PASS = "ka12@2003"          // Replace with your Docker Hub password
-=======
-        DOCKER_PASS = "ka12@20033"          // Replace with your Docker Hub password
->>>>>>> 7180f88 (updated)
-=======
-        DOCKER_PASS = "ka12@2003"          // Replace with your Docker Hub password
->>>>>>> e05bb2f (Added Jenkinsfile)
+        DOCKER_PASS = "ka12@20003"        // Replace with your Docker Hub password
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                git url: 'https://github.com/Kanishkharamesh/Jenkins.git', branch: 'main'
+                git url: 'https://github.com/avi11204/Jenkins.git', branch: 'main'
             }
         }
 
